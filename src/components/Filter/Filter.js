@@ -8,7 +8,7 @@ export const Filter = ({ filter, onFilter }) => {
         type="text"
         name="filter"
         placeholder="Search"
-        value={filter.value}
+        value={filter}
         onChange={e => onFilter(e.target.value)}
       />
     </Label>
