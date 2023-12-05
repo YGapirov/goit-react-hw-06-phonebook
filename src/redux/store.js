@@ -14,6 +14,27 @@ const initialContacts = [
 //   filter: '',
 // };
 
+export const addPhone = values => {
+  return {
+    type: 'app/addPhone',
+    payload: { ...values, id: nanoid() },
+  };
+};
+
+export const deletePhone = contactId => {
+  return {
+    type: 'app/deletePhone',
+    payload: contactId,
+  };
+};
+
+export const filterPhone = value => {
+  return {
+    type: 'filters/filterPhone',
+    payload: value,
+  };
+};
+
 const addInitialState = {
   contacts: initialContacts,
 };
@@ -59,27 +80,6 @@ const filterReducer = (state = filterInitialState, action) => {
     default:
       return state;
   }
-};
-
-export const addPhone = values => {
-  return {
-    type: 'app/addPhone',
-    payload: { ...values, id: nanoid() },
-  };
-};
-
-export const deletePhone = contactId => {
-  return {
-    type: 'app/deletePhone',
-    payload: contactId,
-  };
-};
-
-export const filterPhone = value => {
-  return {
-    type: 'filters/filterPhone',
-    payload: value,
-  };
 };
 
 // const rootReducer = (state = initialState, action) => {
