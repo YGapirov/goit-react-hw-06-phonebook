@@ -10,7 +10,8 @@ import { Container, Title, SubTitle } from './App.styled';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { addPhone, deletePhone, filterPhone } from '../../redux/store';
+import { addPhone, deletePhone } from '../../redux/contactSlice';
+import { filterPhone } from '../../redux/filterSlice';
 
 // const LsKey = 'contacts';
 
