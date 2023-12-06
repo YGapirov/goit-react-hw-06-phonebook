@@ -1,5 +1,7 @@
 import { nanoid } from 'nanoid';
 
+import { createSlice } from '@reduxjs/toolkit';
+
 const initialContacts = [
   { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
   { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
@@ -7,44 +9,69 @@ const initialContacts = [
   { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
 ];
 
-const initialState = {
-  contacts: initialContacts,
-};
+const contactSlice = createSlice({
+  name: 'app',
+  initialState: { contacts: initialContacts },
 
-export const addReducer = (state = initialState, action) => {
-  //приймає попередній стан, і дію
-  switch (
-    action.type //тип дії
-  ) {
-    case 'app/addPhone':
-      return {
-        ...state, //розпилюєм попередній стан
-        contacts: [...state.contacts, action.payload], // оновлюємо дані і додаєм, дані які приходять з актіоном
-      };
-    case 'app/deletePhone':
-      return {
-        ...state,
-        contacts: state.contacts.filter(
-          //видаляє через фільр по співпадінню id
-          contact => contact.id !== action.payload
-        ),
-      };
+  //   reducers: {
+  //     addPhone: {
+  //       reducer(state, action) {
+  //         state.contacts.push(action.payload);
+  //       },
+  //       prepare(newContact) {
+  //         return {
+  //           payload: {
+  //             id: nanoid(),
+  //             ...newContact,
+  //           },
+  //         };
+  //       },
+  //     },
 
-    default:
-      return state;
-  }
-};
+  reducers: {
+    addPhone: {
+      prepare(contact) {
+        return {
+          payload: {
+            id: nanoid(),
+            ...contact,
+          },
+        };
+      },
+      reducer(state, action) {
+        state.contacts.push(action.payload);
+      },
+    },
 
-export const addPhone = values => {
-  return {
-    type: 'app/addPhone',
-    payload: { ...values, id: nanoid() },
-  };
-};
+    deletePhone(state, action) {
+      state.contacts = state.contacts.filter(
+        contact => contact.id !== action.payload
+      );
+    },
+  },
+});
 
-export const deletePhone = contactId => {
-  return {
-    type: 'app/deletePhone',
-    payload: contactId,
-  };
-};
+export const addReducer = contactSlice.reducer;
+export const { addPhone, deletePhone } = contactSlice.actions; //експортуємо генератор акшіон
+
+// import { createAction, createReducer } from '@reduxjs/toolkit';
+
+// export const addPhone = createAction('app/addPhone'); //створюємо генератор екшенів
+// export const deletePhone = createAction('app/deletePhone');
+
+// const initialState = {
+//   contacts: initialContacts,
+// };
+
+// export const addReducer = createReducer(initialState, builder => {
+//   builder
+//     .addCase(addPhone, (state, action) => {
+//       state.contacts.push(action.payload); //додаєм новий контакт імутабельно
+//     })
+
+//     .addCase(deletePhone, (state, action) => {
+//       state.contacts = state.contacts.filter(
+//         contact => contact.id !== action.payload
+//       );
+//     });
+// });
