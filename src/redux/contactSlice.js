@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid';
-
 import { createSlice } from '@reduxjs/toolkit';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 const initialContacts = [
   { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
@@ -12,21 +13,6 @@ const initialContacts = [
 const contactSlice = createSlice({
   name: 'app',
   initialState: { contacts: initialContacts },
-
-  //   reducers: {
-  //     addPhone: {
-  //       reducer(state, action) {
-  //         state.contacts.push(action.payload);
-  //       },
-  //       prepare(newContact) {
-  //         return {
-  //           payload: {
-  //             id: nanoid(),
-  //             ...newContact,
-  //           },
-  //         };
-  //       },
-  //     },
 
   reducers: {
     addPhone: {
@@ -51,27 +37,14 @@ const contactSlice = createSlice({
   },
 });
 
-export const addReducer = contactSlice.reducer;
+const addReducer = contactSlice.reducer;
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['contacts'],
+};
+
+export const contactsReducer = persistReducer(persistConfig, addReducer);
+
 export const { addPhone, deletePhone } = contactSlice.actions; //експортуємо генератор акшіон
-
-// import { createAction, createReducer } from '@reduxjs/toolkit';
-
-// export const addPhone = createAction('app/addPhone'); //створюємо генератор екшенів
-// export const deletePhone = createAction('app/deletePhone');
-
-// const initialState = {
-//   contacts: initialContacts,
-// };
-
-// export const addReducer = createReducer(initialState, builder => {
-//   builder
-//     .addCase(addPhone, (state, action) => {
-//       state.contacts.push(action.payload); //додаєм новий контакт імутабельно
-//     })
-
-//     .addCase(deletePhone, (state, action) => {
-//       state.contacts = state.contacts.filter(
-//         contact => contact.id !== action.payload
-//       );
-//     });
-// });

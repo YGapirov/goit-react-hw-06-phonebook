@@ -1,7 +1,4 @@
-// import { useEffect } from 'react';
-
 import { GlobalStyle } from '../../GlobalStyle';
-// import { nanoid } from 'nanoid';
 
 import { ContactList } from '../ContactList/ContactList';
 import { ContactForm } from '../ContactForm/ContactForm';
@@ -9,34 +6,20 @@ import { Filter } from '../Filter/Filter';
 import { Container, Title, SubTitle } from './App.styled';
 
 import { useDispatch, useSelector } from 'react-redux';
-
 import { addPhone, deletePhone } from '../../redux/contactSlice';
 import { filterPhone } from '../../redux/filterSlice';
-
-// const LsKey = 'contacts';
-
-// //зовнішня функція, яку передаєм в useState
-// const getInitialContacts = () => {
-//   const savedContacts = window.localStorage.getItem(LsKey); //виклакається і відображається ЛС до монтування
-//   return savedContacts !== null ? JSON.parse(savedContacts) : initialContacts; //тернарний
-// };
 
 export const App = () => {
   const dispatch = useDispatch();
   const contacts = useSelector(state => state.contacts.contacts); //отримує значення контакт із store
   const filter = useSelector(state => state.filter.filter); // Отримання значення filter зі стану Redux
 
-  // useEffect(() => {
-  //   window.localStorage.setItem(LsKey, JSON.stringify(contacts));
-  // }, [contacts]); //під капотом порівняється значення контакт попередні з введеним
-
   const addContact = value => {
-    dispatch(addPhone(value));
-
     if (contacts.some(contact => contact.name === value.name)) {
       alert(`${value.name} is already on contacts.`);
       return;
     }
+    dispatch(addPhone(value)); //якщо контакта такого нема, діспатчить  новий контакт в список
   };
 
   const updateFilter = value => {
