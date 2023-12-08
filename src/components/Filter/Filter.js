@@ -1,6 +1,16 @@
 import { Label, Input } from './Filter.styled';
 
-export const Filter = ({ filter, onFilter }) => {
+import { useDispatch, useSelector } from 'react-redux';
+import { filterPhone } from '../../redux/filterSlice';
+
+export const Filter = () => {
+  const dispatch = useDispatch();
+  const filter = useSelector(state => state.filter.filter); // Отримання значення filter зі стану Redux
+
+  const updateFilter = value => {
+    dispatch(filterPhone(value));
+  };
+
   return (
     <Label>
       Find contacts by name
@@ -9,7 +19,7 @@ export const Filter = ({ filter, onFilter }) => {
         name="filter"
         placeholder="Search"
         value={filter}
-        onChange={e => onFilter(e.target.value)}
+        onChange={e => updateFilter(e.target.value)}
       />
     </Label>
   );

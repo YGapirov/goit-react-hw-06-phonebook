@@ -8,6 +8,8 @@ import {
   StyledError,
   Label,
 } from './ContactForm.styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { addPhone } from '../../redux/contactSlice';
 
 const formSchema = Yup.object().shape({
   name: Yup.string()
@@ -22,7 +24,22 @@ const formSchema = Yup.object().shape({
     .required('Required'),
 });
 
-export const ContactForm = ({ onAddContact }) => {
+export const ContactForm = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts.contacts); //отримує значення контакт із store
+
+  const addContact = value => {
+    if (
+      contacts.some(
+        contact => contact.name.toLowerCase() === value.name.toLowerCase()
+      )
+    ) {
+      alert(`${value.name} is already on contacts.`);
+      return;
+    }
+    dispatch(addPhone(value)); //якщо контакта такого нема, діспатчить  новий контакт в список
+  };
+
   return (
     <StyledWrapper>
       <Formik
@@ -32,8 +49,7 @@ export const ContactForm = ({ onAddContact }) => {
         }}
         validationSchema={formSchema}
         onSubmit={(values, actions) => {
-          //   console.log(values);
-          onAddContact(values);
+          addContact(values);
           actions.resetForm();
         }}
       >
