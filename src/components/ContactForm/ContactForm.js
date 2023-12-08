@@ -11,22 +11,23 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { addPhone } from '../../redux/contactSlice';
 
-const formSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-  number: Yup.string()
-    .matches(
-      /^(\d{2,}-\d{2,}-\d{2,}|\d{2,}-\d{2,}|\d{5,})$/,
-      'It must be min 5 numbers (1234567 or 123-45-67)'
-    )
-    .required('Required'),
-});
-
 export const ContactForm = () => {
   const dispatch = useDispatch();
   const contacts = useSelector(state => state.contacts.contacts); //отримує значення контакт із store
+
+  const formSchema = Yup.object().shape({
+    name: Yup.string()
+      .matches(/^[\p{L}]+$/u, 'Only letters are allowed')
+      .min(2, 'Too Short!')
+      .max(50, 'Too Long!')
+      .required('Required'),
+    number: Yup.string()
+      .matches(
+        /^(\d{2,}-\d{2,}-\d{2,}|\d{2,}-\d{2,}|\d{5,})$/,
+        'It must be min 5 numbers (1234567 or 123-45-67)'
+      )
+      .required('Required'),
+  });
 
   const addContact = value => {
     if (
